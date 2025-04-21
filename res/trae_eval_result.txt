@@ -1,0 +1,15 @@
+总评分: 0.7498
+问答评分 (qa_score): 0.5000
+简洁度评分 (conciseness): 0.9996
+
+问题和答案:
+1. Is there a login attempt for root from 183.62.140.253? -> 0
+2. Is there a successful login for any user? -> 0
+3. Is there a login attempt using SSH protocol? -> 1
+4. Is there a connection closed by the server before authentication? -> 0
+5. Is there a login attempt with multiple failed password events for the same user? -> 1
+6. Is there a login attempt for a user other than root? -> 1
+7. Is there a login attempt where the client host is not explicitly mentioned? -> 0
+8. Is there a login attempt with a 'Received disconnect' message after failure? -> 1
+9. Is there a login attempt where 'pam_unix(sshd:auth)' authentication fails? -> 0
+10. Is there a login attempt where the client sends an invalid user name? -> 1
