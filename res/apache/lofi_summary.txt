@@ -1,0 +1,39 @@
+Exception in connection;/172.17.0.5:50538
+Container killed on request. Exit code is 137;container_1634793166808_0013_01_000004
+Failed to connect;/172.17.0.2:50010
+Container killed on request. Exit code is 137;container_1634281403423_0049_01_000003
+Unable to create executor due to null
+Unable to create executor due to Exception thrown;awaitResult
+Unable to create executor due to null
+Unable to create executor due to null
+Exception encountered while connecting to the server;remote=worker3/172.17.0.5:45151
+Failed to connect;/172.17.0.2:50010
+Unable to create executor due to Exception thrown;awaitResult
+Driver master3:38625 disassociated;master3:38625
+Failed to connect;/172.17.0.2:50010
+Container killed on request. Exit code is 137;container_1634281403423_0051_01_000003
+Driver from master3:46013 disconnected;master3:46013
+Driver requested to kill executor(s);2
+Failed to connect;/172.17.0.2:50010
+Exception encountered while connecting to the server;remote=worker3/172.17.0.5:44367
+Exception encountered while connecting to the server;remote=worker1/172.17.0.3:8030
+Excluding datanode;[172.17.0.2:50010,DS-29d8ab1a-76cc-4fe7-9b33-9e93de4c3e50,DISK]
+Failed to connect;/172.17.0.2:50010
+Failed to connect;/172.17.0.2:50010
+Failed to connect;/172.17.0.2:50010
+Container killed on request. Exit code is 137;container_1634281403423_0040_01_000003
+Excluding datanode;[172.17.0.5:50010,DS-0d9516f9-84f6-4a15-93d6-362c67c79810,DISK]
+Exception in connection;worker3/172.17.0.5:37915
+Excluding datanode;[172.17.0.2:50010,DS-d25a23e3-27c4-4496-a412-98bf1f9c8a53,DISK]
+Container killed on request. Exit code is 137;container_1634281403423_0034_01_000003
+Driver requested to kill executor(s);2
+Final app status: FAILED;exitCode: 10
+Driver from master3:46013 disconnected;master3:46013
+Uncaught exception;thread Thread-2
+Container killed on request. Exit code is 137;container_1634281403423_0056_01_000002
+Final app status: FAILED;exitCode: 10
+Container killed on request. Exit code is 137;container_1634281403423_0035_01_000002
+Driver requested to kill executor(s);1
+Error sending result;/172.17.0.5:38466
+Uncaught exception;thread Thread-2
+Driver from master3:36883 disconnected;master3:36883

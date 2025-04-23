@@ -1,0 +1,68 @@
+日志摘要评估结果对比
+==============================
+
+摘要评分对比:
+摘要文件                 总评分        问答评分            简洁度评分          
+------------------------------------------------------------
+minimax_summary.txt  0.6796     0.4000          0.9592         
+dpp_summary.txt      0.5930     0.2000          0.9860         
+lofi_summary.txt     0.5884     0.2000          0.9768         
+
+==============================
+
+摘要文件: minimax_summary.txt
+总评分: 0.6796
+问答评分 (qa_score): 0.4000
+简洁度评分 (conciseness): 0.9592
+
+问题和答案:
+1. Is 'WARN' present in the log text? -> 0
+2. Does the log text contain 'x-trace-id:-99'? -> 0
+3. Is 'x-request-id:routeid' mentioned in the log text? -> 0
+4. Is there an 'internal server error' mentioned in the log text? -> 1
+5. Does the log text include 'opname:queryserviceparams'? -> 1
+6. Is 'error code:vapp-09033' present in the log text? -> 1
+7. Is 'serverIP=127.0.0.1:12345' referenced in the log text? -> 0
+8. Is 'ERROR' present in the log text? -> 1
+9. Does the log text mention 'ByUserId from db parameter:userid01'? -> 0
+10. Is 'responseEntity return httpCode is 401' present in the log text? -> 0
+
+------------------------------
+
+摘要文件: dpp_summary.txt
+总评分: 0.5930
+问答评分 (qa_score): 0.2000
+简洁度评分 (conciseness): 0.9860
+
+问题和答案:
+1. Is 'WARN' present in the log text? -> 1
+2. Does the log text contain 'x-trace-id:-99'? -> 0
+3. Is 'x-request-id:routeid' mentioned in the log text? -> 0
+4. Is there an 'internal server error' mentioned in the log text? -> 0
+5. Does the log text include 'opname:queryserviceparams'? -> 0
+6. Is 'error code:vapp-09033' present in the log text? -> 0
+7. Is 'serverIP=127.0.0.1:12345' referenced in the log text? -> 0
+8. Is 'ERROR' present in the log text? -> 1
+9. Does the log text mention 'ByUserId from db parameter:userid01'? -> 0
+10. Is 'responseEntity return httpCode is 401' present in the log text? -> 0
+
+------------------------------
+
+摘要文件: lofi_summary.txt
+总评分: 0.5884
+问答评分 (qa_score): 0.2000
+简洁度评分 (conciseness): 0.9768
+
+问题和答案:
+1. Is 'WARN' present in the log text? -> 0
+2. Does the log text contain 'x-trace-id:-99'? -> 0
+3. Is 'x-request-id:routeid' mentioned in the log text? -> 0
+4. Is there an 'internal server error' mentioned in the log text? -> 1
+5. Does the log text include 'opname:queryserviceparams'? -> 0
+6. Is 'error code:vapp-09033' present in the log text? -> 0
+7. Is 'serverIP=127.0.0.1:12345' referenced in the log text? -> 0
+8. Is 'ERROR' present in the log text? -> 1
+9. Does the log text mention 'ByUserId from db parameter:userid01'? -> 0
+10. Is 'responseEntity return httpCode is 401' present in the log text? -> 0
+
+------------------------------

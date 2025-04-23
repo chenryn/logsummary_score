@@ -1,0 +1,56 @@
+httpCode is 503. requestEntity's type is GET;url is /url11
+not existed devices;[f055ec85-385c-5519-a2bf-3d2c50e31a94]
+Error while closing command context
+parameter check error;param name:name, value:value
+Error creating bean with name;cService
+parameter check error;param name:name, value:value
+Failed to check params
+Data too large;data for [indices:indes1] 
+can supported to reaTime change for dbResource;ids:["id"]
+no write index is defined
+primary shard is not active;openstack
+create auth user request failed;userName = userName
+not exist;vdc id:id
+response is 404, query iam doamin failed
+The column "NAME" length exceeded the maximum, (actual: 255, maximum: 128)
+param timezone error;timezone = asia
+list index out of range
+The component name cannot be duplicated
+parameter check error;param name:username not same, value:value
+service does not exist;serviceid = serviceid
+service does not exist;serviceid = serviceid
+service does not exist;serviceid = serviceid
+Unique constraint violated;index_1_3039, duplicate key 127.0.0.1-indicator
+service does not exist;serviceid = serviceid
+httpCode is 500.ClassCastException;url is /url11
+create auth user request failed;userName = username
+Failed to obtain JDBC Connection,The account was locked
+cannot get topicInfo for consumer by topic: topic
+cannot get topicInfo for consumer by topic: topic
+not existed devices;[local]
+illegal parameters,response code is 400;url=/obj
+url delecttion Task is not exist or dup;taskId is taskId
+query id is null
+Failed to find the matched session id;client: 127.0.0.1, server: , request: "POST /url555 HTTP/1.1"
+httpCode is 500;url is https://127.0.0.1:8082/url123
+httpCode is 403;url is /url666?status=COMPLETE&start=0&limit=50
+parameter check error;param name:name, value:value
+url detection error;taskId :taskId
+url detection error;taskId :taskId
+can supported to reaTime change for dbResource;ids:["id"]
+can supported to reaTime change for dbResource;ids:["id"]
+param has error;jobHisId:9221
+query ****** failed;historyid=historyid
+query ****** failed;historyid=historyid
+Modify dump job but not ok
+read line timed-out;127.0.0.1:9090(https)
+not found completed todo record;objId:objId
+not found completed todo record;objId:objId
+not found completed todo record;objId:objId
+parameter check error;param name:name, value:value
+parameter check error;param name:model, value:type must be user
+invalid port number
+status 503;request /url444
+Failed to call the external service.
+Host name must not be empty
+service handle error;url:/url13

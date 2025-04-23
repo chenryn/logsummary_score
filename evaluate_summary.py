@@ -79,14 +79,13 @@ class ExtractKeyphrasePrompt:
                 'content': """You are an IT operations and security expert.
 Extract keyphrases from the following log text that are crucial for understanding IT operations and security events.
 Identify entities of the following types:
-- Error Message: directly describes a failed action or an exception raised from a software stack.
-- Missing Component: means some components are unavailable such as devices, tasks and hosts.
-- Abnormal Behavior: indicates the degraded performance of an application e.g., HTTP timeout, slow response time.
-- Wrong Status: means a specific response code is incorporated to explain the wrong event, e.g., status code, error flags.
-- Address: includes a concrete URL of HTTP requests, IP address or paths to a folder.
-- Component ID: records the index for a system component e.g., job ID, task ID, service ID.
-- Parameter Name: shows the key and value for a parameter e.g., data name, user name.
-
+- **Network Identifiers:** IP Address (e.g., 192.168.1.100), Hostname/Domain (e.g., server01.local), URL, Port Number (e.g., 443), Protocol (e.g., TCP).
+- **System Identifiers:** Username (e.g., root, svc_app), Process ID (PID) (e.g., 12345), Service Name (e.g., sshd), Device/Host ID.
+- **Resource Identifiers:** File Path (e.g., /var/log/auth.log), Job/Task/Component ID (e.g., job_123, disk_sda1).
+- **Status & Codes:** Log Level (e.g., ERROR, WARN), Error Code/Status Code (e.g., 500, 404, 0xc0000005), Event ID (e.g., 4625).
+- **Security Artifacts:** CVE ID (e.g., CVE-2023-1234), Malware Name, Alert Type/Signature (e.g., 'SQL Injection Attempt', 'Brute Force Login').
+- **Event Description / Issue Type:** Key terms or phrases describing the event, error, or behavior (e.g., 'Connection timed out', 'Authentication failed', 'Disk full', 'Service stopped', 'Component unavailable', 'HTTP timeout', 'Slow response time', 'Missing device').
+- **Key Parameters / Values:** Specific configuration settings or important data values mentioned (e.g., 'threshold=90%', 'user_role=admin', 'request_size=10MB').
 
 Return only a JSON list of keyphrases.
 """
@@ -166,31 +165,8 @@ class SummarizationScore:
         self.question_generation_prompt = GenerateQuestionsPrompt()
         self.answer_generation_prompt = GenerateAnswersPrompt()
     
-    async def score(self, text, summary):
-        # 提取关键短语
-        keyphrases_response = await self.extract_keyphrases_prompt.generate(text)
-        keyphrases = keyphrases_response.keyphrases
-        
-        # 动态生成问题
-        questions_gen = await self.question_generation_prompt.generate(text, keyphrases)
-        questions = questions_gen.questions[:10]
-        
-        # 获取答案
-        answers_gen = await self.answer_generation_prompt.generate(summary, questions)
-        answers = answers_gen.answers
-
-        # 计算分数
-        scores = {}
-        qa_score = self._compute_qa_score(answers)
-        scores["qa_score"] = qa_score
-        if self.length_penalty:
-            conciseness_score = self._compute_conciseness_score(text, summary)
-            scores["conciseness"] = conciseness_score # 使用 'conciseness' 作为键
-        
-        # 计算最终评分
-        final_score = self._compute_score(scores)
-        
-        return final_score, scores, questions, answers
+    # 注意：原来的score方法已被移除，相关逻辑已移至main函数
+    # 这样可以确保所有摘要使用相同的关键短语和问题进行评估
     
     def _compute_score(self, scores):
         # 与 ragas_summarization.py 保持一致
@@ -204,6 +180,7 @@ class SummarizationScore:
         return correct / len(answers) if answers else 0
     
     def _compute_conciseness_score(self, text, summary):
+        # 计算摘要简洁度评分：1 - (摘要与原文较短者的长度 / 原文长度)，值越大表示摘要越简洁
         return 1 - min(len(summary), len(text)) / (len(text) + 1e-10)
 
 def read_file(file_path):
@@ -225,16 +202,40 @@ def write_file(file_path, content):
         logger.error(f"写入文件 {file_path} 失败: {e}")
         return False
 
-def format_results(score, scores, questions, answers):
-    """格式化评分结果"""
-    result = f"总评分: {score:.4f}\n"
-    result += f"问答评分 (qa_score): {scores.get('qa_score', 0):.4f}\n" # 使用 get 以防万一
-    if 'conciseness' in scores:
-        result += f"简洁度评分 (conciseness): {scores['conciseness']:.4f}\n"
+def format_results(results):
+    """格式化多个摘要的评分结果"""
+    result = "日志摘要评估结果对比\n" + "="*30 + "\n\n"
     
-    result += "\n问题和答案:\n"
-    for i, (q, a) in enumerate(zip(questions, answers)):
-        result += f"{i+1}. {q} -> {a}\n"
+    # 按照评分从高到低排序
+    sorted_results = sorted(results, key=lambda x: x[0], reverse=True)
+    
+    # 添加摘要评分对比表格
+    result += "摘要评分对比:\n"
+    result += "{:<20} {:<10} {:<15} {:<15}\n".format("摘要文件", "总评分", "问答评分", "简洁度评分")
+    result += "-"*60 + "\n"
+    
+    for score, scores, _, _, summary_file in sorted_results:
+        file_name = os.path.basename(summary_file)
+        qa_score = scores.get('qa_score', 0)
+        conciseness = scores.get('conciseness', 0)
+        result += "{:<20} {:<10.4f} {:<15.4f} {:<15.4f}\n".format(
+            file_name, score, qa_score, conciseness
+        )
+    
+    # 为每个摘要添加详细信息
+    result += "\n" + "="*30 + "\n"
+    for score, scores, questions, answers, summary_file in sorted_results:
+        file_name = os.path.basename(summary_file)
+        result += f"\n摘要文件: {file_name}\n"
+        result += f"总评分: {score:.4f}\n"
+        result += f"问答评分 (qa_score): {scores.get('qa_score', 0):.4f}\n"
+        if 'conciseness' in scores:
+            result += f"简洁度评分 (conciseness): {scores['conciseness']:.4f}\n"
+        
+        result += "\n问题和答案:\n"
+        for i, (q, a) in enumerate(zip(questions, answers)):
+            result += f"{i+1}. {q} -> {a}\n"
+        result += "\n" + "-"*30 + "\n"
     
     return result
 
@@ -242,7 +243,7 @@ def main():
     # 解析命令行参数
     parser = argparse.ArgumentParser(description='评估日志摘要质量')
     parser.add_argument('--log', default='data/ssh.log', help='原始日志文件路径')
-    parser.add_argument('--summary', default='dpp_summary.txt', help='摘要文件路径')
+    parser.add_argument('--summaries', nargs='+', required=True, help='摘要文件路径列表')
     parser.add_argument('--output', default='evaluation_result.txt', help='评估结果输出文件路径')
     args = parser.parse_args()
     
@@ -253,33 +254,75 @@ def main():
         logger.error("原始日志文件为空或无法读取")
         return
     
-    logger.info(f"读取摘要文件: {args.summary}")
-    summary_text = read_file(args.summary)
-    if not summary_text:
-        logger.error("摘要文件为空或无法读取")
+    # 创建评估器
+    evaluator = SummarizationScore()
+    
+    # 首先提取关键短语和生成问题，确保所有摘要使用相同的评估标准
+    logger.info("提取关键短语和生成问题...")
+    keyphrases_response = asyncio.run(evaluator.extract_keyphrases_prompt.generate(log_text))
+    keyphrases = keyphrases_response.keyphrases
+    
+    questions_gen = asyncio.run(evaluator.question_generation_prompt.generate(log_text, keyphrases))
+    questions = questions_gen.questions[:10]
+    
+    logger.info(f"已提取 {len(keyphrases)} 个关键短语，生成 {len(questions)} 个问题")
+    
+    # 评估所有摘要文件
+    results = []
+    
+    for summary_file in args.summaries:
+        logger.info(f"读取摘要文件: {summary_file}")
+        summary_text = read_file(summary_file)
+        if not summary_text:
+            logger.error(f"摘要文件 {summary_file} 为空或无法读取")
+            continue
+            
+        # 评估摘要
+        logger.info(f"开始评估摘要: {summary_file}...")
+        
+        # 只获取答案，使用相同的问题
+        answers_gen = asyncio.run(evaluator.answer_generation_prompt.generate(summary_text, questions))
+        answers = answers_gen.answers
+        
+        # 计算分数
+        scores = {}
+        qa_score = evaluator._compute_qa_score(answers)
+        scores["qa_score"] = qa_score
+        if evaluator.length_penalty:
+            conciseness_score = evaluator._compute_conciseness_score(log_text, summary_text)
+            scores["conciseness"] = conciseness_score
+        
+        # 计算最终评分
+        final_score = evaluator._compute_score(scores)
+        
+        results.append((final_score, scores, questions, answers, summary_file))
+        logger.info(f"摘要 {summary_file} 评估完成，总评分: {final_score:.4f}")
+    
+    if not results:
+        logger.error("没有成功评估任何摘要文件")
         return
     
-    # 评估摘要
-    logger.info("开始评估摘要...")
-    evaluator = SummarizationScore()
-    # 使用 asyncio.run 来运行异步的 score 方法
-    score, scores, questions, answers = asyncio.run(evaluator.score(log_text, summary_text))
-    
     # 格式化结果
-    result = format_results(score, scores, questions, answers)
+    result = format_results(results)
     
     # 输出结果
-    logger.info(f"评估完成，总评分: {score:.4f}")
+    logger.info(f"所有摘要评估完成，共评估了 {len(results)} 个摘要文件")
     logger.info(f"将结果写入: {args.output}")
     if write_file(args.output, result):
         logger.info(f"结果已保存到: {args.output}")
     
     # 打印结果摘要
     print("\n评估结果摘要:")
-    print(f"总评分: {score:.4f}")
-    print(f"问答评分 (qa_score): {scores.get('qa_score', 0):.4f}")
-    if 'conciseness' in scores:
-        print(f"简洁度评分 (conciseness): {scores['conciseness']:.4f}")
+    print(f"共评估了 {len(results)} 个摘要文件")
+    
+    # 按评分排序并显示前三名
+    sorted_results = sorted(results, key=lambda x: x[0], reverse=True)
+    for i, (score, scores, _, _, summary_file) in enumerate(sorted_results[:3]):
+        print(f"\n第 {i+1} 名: {os.path.basename(summary_file)}")
+        print(f"总评分: {score:.4f}")
+        print(f"问答评分: {scores.get('qa_score', 0):.4f}")
+        if 'conciseness' in scores:
+            print(f"简洁度评分: {scores['conciseness']:.4f}")
 
 if __name__ == "__main__":
     main()

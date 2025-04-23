@@ -13,19 +13,19 @@
 ## 使用方法
 
 ```bash
-python3 evaluate_summary.py --log <日志文件路径> --summary <摘要文件路径> --output <输出文件路径>
+python3 evaluate_summary.py --log <日志文件路径> --summaries <多个摘要文件路径> --output <输出文件路径>
 ```
 
 ### 参数说明
 
 - `--log`: 原始日志文件路径，默认为 `ssh.log`
-- `--summary`: 摘要文件路径，默认为 `dpp_summary.txt`
+- `--summaries`: 摘要文件路径，可以指定多个，用空格分隔。
 - `--output`: 评估结果输出文件路径，默认为 `evaluation_result.txt`
 
 ### 示例
 
 ```bash
-python3 evaluate_summary.py --log data/ssh.log --summary res/trae_summary.txt --output res/trae_eval_result.txt
+python3 evaluate_summary.py --log data/ssh.log --summary res/ssh/trae_summary.txt res/ssh/ddp_summary.txt --output res/ssh_summary_evaluation.txt
 ```
 
 ## 评分标准
@@ -72,11 +72,13 @@ python3 evaluate_summary.py --log data/ssh.log --summary res/trae_summary.txt --
 
 *评估基于ssh.log测试数据集，权重设置为默认值（问答0.5，简洁度0.5），所有评分保留四位小数*
 
-## 与dpp.py的集成
+## 其他
+
+### dpp 数据说明
 
 大模型直接总结的文本，可以直接保存。
 聚类采样总结方案，可参考目录下的 dpp.py 文件。运行dpp.py生成摘要并保存到res/dpp_summary.txt后，可以直接运行evaluate_summary.py来评估摘要质量。
 
-## TODO
+### lofi 数据说明
 
-后续考虑验证 [LoFI 项目中标注数据](https://github.com/Jun-jie-Huang/LoFI/tree/main/data)的摘要质量，在本方法下的效果。
+通过 `extract_logs.py` 转换 [LoFI 项目中标注数据](https://github.com/Jun-jie-Huang/LoFI/tree/main/data)中的 test.json 部分。raw 部分是原始日志，summary 部分是人工标注的摘要。分别放到 data 和 res 目录下。

@@ -1,0 +1,68 @@
+日志摘要评估结果对比
+==============================
+
+摘要评分对比:
+摘要文件                 总评分        问答评分            简洁度评分          
+------------------------------------------------------------
+minimax_summary.txt  0.5869     0.2000          0.9738         
+dpp_summary.txt      0.5445     0.1000          0.9890         
+lofi_summary.txt     0.5428     0.1000          0.9856         
+
+==============================
+
+摘要文件: minimax_summary.txt
+总评分: 0.5869
+问答评分 (qa_score): 0.2000
+简洁度评分 (conciseness): 0.9738
+
+问题和答案:
+1. Is 'INFO' present in the log text? -> 0
+2. Is 'ERROR' present in the log text? -> 1
+3. Is 'WARN' present in the log text? -> 1
+4. Is 'Changing modify acls groups to' present in the log text? -> 0
+5. Is 'Changing modify acls to' present in the log text? -> 0
+6. Is 'Changing view acls groups to' present in the log text? -> 0
+7. Is 'Changing view acls to' present in the log text? -> 0
+8. Is 'Connecting to driver' present in the log text? -> 0
+9. Is 'Created local directory' present in the log text? -> 0
+10. Is 'MemoryStore started with capacity' present in the log text? -> 0
+
+------------------------------
+
+摘要文件: dpp_summary.txt
+总评分: 0.5445
+问答评分 (qa_score): 0.1000
+简洁度评分 (conciseness): 0.9890
+
+问题和答案:
+1. Is 'INFO' present in the log text? -> 0
+2. Is 'ERROR' present in the log text? -> 0
+3. Is 'WARN' present in the log text? -> 0
+4. Is 'Changing modify acls groups to' present in the log text? -> 0
+5. Is 'Changing modify acls to' present in the log text? -> 0
+6. Is 'Changing view acls groups to' present in the log text? -> 0
+7. Is 'Changing view acls to' present in the log text? -> 0
+8. Is 'Connecting to driver' present in the log text? -> 1
+9. Is 'Created local directory' present in the log text? -> 0
+10. Is 'MemoryStore started with capacity' present in the log text? -> 0
+
+------------------------------
+
+摘要文件: lofi_summary.txt
+总评分: 0.5428
+问答评分 (qa_score): 0.1000
+简洁度评分 (conciseness): 0.9856
+
+问题和答案:
+1. Is 'INFO' present in the log text? -> 0
+2. Is 'ERROR' present in the log text? -> 1
+3. Is 'WARN' present in the log text? -> 0
+4. Is 'Changing modify acls groups to' present in the log text? -> 0
+5. Is 'Changing modify acls to' present in the log text? -> 0
+6. Is 'Changing view acls groups to' present in the log text? -> 0
+7. Is 'Changing view acls to' present in the log text? -> 0
+8. Is 'Connecting to driver' present in the log text? -> 0
+9. Is 'Created local directory' present in the log text? -> 0
+10. Is 'MemoryStore started with capacity' present in the log text? -> 0
+
+------------------------------

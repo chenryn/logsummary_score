@@ -99,7 +99,7 @@ class DPPHandler:
             'Content-Type': 'application/json'
         }
         data = {
-            'model': 'qwen-plus',
+            'model': 'qwen-turbo',
             'input': {
                 'messages': [
                     {
